@@ -1,0 +1,10 @@
+spring.application.name: tableBuddy
+
+spring:
+  config:
+    import: application-secret.yml
+
+spring.datasource.driverClassName: org.mariadb.jdbc.Driver
+spring.datasource.url: jdbc:mariadb://${DATABASE.DOMAIN}:3306/${DATABASE.NAME}
+spring.datasource.username: ${DATABASE.USER_NAME}
+spring.datasource.password: ${DATABASE.PASSWORD}
