@@ -66,3 +66,8 @@
   - https://github.com/excalidraw/excalidraw (커밋메시지 참고)
   - https://www.conventionalcommits.org/en/v1.0.0/
 
+
+- 공통 리스폰스
+- 글로벌 에러 핸들러
+- 커스텀 익셉션
+- 

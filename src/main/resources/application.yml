@@ -1,10 +1,44 @@
 spring.application.name: tableBuddy
 
+api-root-path: /api
+
+server:
+  port: 8080
+
+
 spring:
   config:
     import: application-secret.yml
+
+# -----------db 설정 파일로 분리
 
 spring.datasource.driverClassName: org.mariadb.jdbc.Driver
 spring.datasource.url: jdbc:mariadb://${DATABASE.DOMAIN}:3306/${DATABASE.NAME}
 spring.datasource.username: ${DATABASE.USER_NAME}
 spring.datasource.password: ${DATABASE.PASSWORD}
+
+
+
+
+---
+spring.config.activate.on-profile: local
+
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+
+
+
+---
+spring.config.activate.on-profile: dev
+
+
+
+
+
+
+---
+spring.config.activate.on-profile: prod
