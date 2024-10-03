@@ -10,22 +10,22 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ErrorResponse {
-    private List<String> messages;
     private String code;
+    private List<String> messages;
 
     private ErrorResponse(final ErrorCode code) {
-        this.messages = Collections.singletonList(code.getMessage());
         this.code = code.getCode();
+        this.messages = Collections.singletonList(code.getMessage());
     }
 
     public ErrorResponse(final ErrorCode code, final String message) {
-        this.messages = Collections.singletonList(message);
         this.code = code.getCode();
+        this.messages = Collections.singletonList(message);
     }
 
     public ErrorResponse(final ErrorCode code, final List<String> messages) {
-        this.messages = messages;
         this.code = code.getCode();
+        this.messages = messages;
     }
 
     public static ErrorResponse of(final ErrorCode code) {

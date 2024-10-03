@@ -1,13 +1,15 @@
-package com.cs2404.tablebuddy.jongkuk.memberenum;
+package com.cs2404.tablebuddy.member.entity;
+
+import com.cs2404.tablebuddy.common.exception.CustomBusinessException;
+import com.cs2404.tablebuddy.common.exception.ErrorCode;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public enum MemberRole {
     CUSTOMER,
-    OWNER,
-    ADMIN;
-
+    OWNER
+    ;
 
     private static final Map<String, MemberRole> roleMap = new HashMap<>();
 
@@ -17,12 +19,11 @@ public enum MemberRole {
         }
     }
 
-
     public static MemberRole from(String memberRole) {
         if (roleMap.containsKey(memberRole)) {
             return roleMap.get(memberRole);
         }
 
-        throw new IllegalArgumentException();
+        throw new CustomBusinessException(ErrorCode.INVALID_ROLE);
     }
 }
