@@ -1,6 +1,9 @@
 package com.cs2404.tablebuddy.common.response;
 
 
+import lombok.Getter;
+
+@Getter
 public class ApiResponse<T> {
     private final ResultType result;
 
