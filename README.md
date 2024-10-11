@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d204118f-7d99-4224-88e2-ed05c5bf46c9" alt="tablebuddy" width="460" height="300">
+</p>
+
+
 # 테이블버디 서비스
 
 **식당 줄서기 서비스**
