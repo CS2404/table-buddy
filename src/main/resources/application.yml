@@ -5,7 +5,6 @@ api-root-path: /api
 server:
   port: 8080
 
-
 spring:
   config:
     import: application-secret.yml
@@ -14,3 +13,9 @@ spring.datasource.driverClassName: org.mariadb.jdbc.Driver
 spring.datasource.url: jdbc:mariadb://${DATABASE.DOMAIN}:3306/${DATABASE.NAME}
 spring.datasource.username: ${DATABASE.USER_NAME}
 spring.datasource.password: ${DATABASE.PASSWORD}
+
+jwt:
+  access-token-expire-second: ${JWT.ACCESS_TOKEN_EXPIRE_SECOND}
+  access-token-secret: ${JWT.ACCESS_TOKEN_SECRET}
+  refresh-token-expire_second: ${JWT.REFRESH_TOKEN_EXPIRE_SECOND}
+  refresh-token-secret: ${JWT.REFRESH_TOKEN_SECRET}
