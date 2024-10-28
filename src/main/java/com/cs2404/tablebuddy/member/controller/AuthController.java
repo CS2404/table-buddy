@@ -20,12 +20,15 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<MemberSignUpDto.Response> signUp(
-            @Valid @RequestBody MemberSignUpDto.Request memberSignUpDto) {
+            @Valid @RequestBody MemberSignUpDto.Request memberSignUpRequest) {
 
-        Long savedMemberId = memberService.signUp(memberSignUpDto);
+        Long savedMemberId = memberService.signUp(memberSignUpRequest);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new MemberSignUpDto.Response(savedMemberId));
     }
+
+
+
 }
