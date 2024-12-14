@@ -23,15 +23,20 @@ public class MemberService {
     private final JwtUtils jwtUtils;
 
     @Transactional
-    public Long signUp(MemberSignUpDto.Request memberSignUpRequest) {
-        validateEmail(memberSignUpRequest.getEmail());
+    public Long signUp(String email,
+                       String rawPassword,
+                       String name,
+                       String phoneNumber,
+                       MemberRole memberRole
+    ) {
+        validateEmail(email);
 
         MemberEntity newMember = MemberEntity.builder()
-                .name(memberSignUpRequest.getName())
-                .phoneNumber(memberSignUpRequest.getPhoneNumber())
-                .email(memberSignUpRequest.getEmail())
-                .password(passwordEncoder.encode(memberSignUpRequest.getPassword()))
-                .role(MemberRole.from(memberSignUpRequest.getRole()))
+                .name(name)
+                .phoneNumber(phoneNumber)
+                .email(email)
+                .password(passwordEncoder.encode(rawPassword))
+                .role(memberRole)
                 .isDeleted(DeleteStatus.N)
                 .build();
 

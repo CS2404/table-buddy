@@ -1,6 +1,7 @@
 package com.cs2404.tablebuddy.member.controller;
 
 import com.cs2404.tablebuddy.member.dto.MemberSignUpDto;
+import com.cs2404.tablebuddy.member.entity.MemberRole;
 import com.cs2404.tablebuddy.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,13 @@ public class AuthController {
     public ResponseEntity<MemberSignUpDto.Response> signUp(
             @Valid @RequestBody MemberSignUpDto.Request memberSignUpRequest) {
 
-        Long savedMemberId = memberService.signUp(memberSignUpRequest);
+        Long savedMemberId = memberService.signUp(
+                memberSignUpRequest.getEmail(),
+                memberSignUpRequest.getPassword(),
+                memberSignUpRequest.getName(),
+                memberSignUpRequest.getPhoneNumber(),
+                MemberRole.from(memberSignUpRequest.getRole())
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
