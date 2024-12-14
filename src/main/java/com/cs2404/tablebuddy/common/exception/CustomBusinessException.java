@@ -1,9 +1,12 @@
 package com.cs2404.tablebuddy.common.exception;
 
+import lombok.Getter;
+
+@Getter
 public class CustomBusinessException extends RuntimeException {
     private final ErrorCode errorCode;
 
-    public CustomBusinessException(String message, ErrorCode errorCode) {
+    public CustomBusinessException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }
@@ -13,7 +16,4 @@ public class CustomBusinessException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
 }

@@ -44,6 +44,7 @@ public class StoreEntity extends BaseTimeEntity {
     private Long maxWaitingCapacity;         // 최대 대기인원
 
     @Column(name = "is_deleted", length = 1, nullable = false)
+    @Enumerated(EnumType.STRING)
     private DeleteStatus isDeleted;
 
     @Builder
