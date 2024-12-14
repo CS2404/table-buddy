@@ -23,11 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-
-
 /**
  * @WebMvcTest : 웹 계층과 관련된 Bean 등록
- *
+ * <p>
  * 컨트롤러 에서는 WebMvcTest 방식
  * 그외 유닛테스트
  */
@@ -50,7 +48,7 @@ class AuthControllerTest {
     @Test
     public void singup_테스트() throws Exception {
         // given
-        MemberSignUpDto.Request memberRequest = MemberSignUpDto.Request.builder()
+        MemberSignUpDto.Request memberSignupRequest = MemberSignUpDto.Request.builder()
                 .name("userName")
                 .phoneNumber("010-1234-1234")
                 .password("testPassword")
@@ -59,12 +57,20 @@ class AuthControllerTest {
                 .build();
         MemberSignUpDto.Response memberResponse = new MemberSignUpDto.Response(1L);
 
-        given(memberService.signUp(any(MemberSignUpDto.Request.class))).willReturn(1L);
+        given(
+                memberService.signUp(
+                        memberSignupRequest.getEmail(),
+                        memberSignupRequest.getPassword(),
+                        memberSignupRequest.getName(),
+                        memberSignupRequest.getPhoneNumber(),
+                        MemberRole.from(memberSignupRequest.getRole())
+                )
+        ).willReturn(1L);
 
         // when
         ResultActions resultActions = mockMvc.perform(post(apiRootPath + "/v1/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(memberRequest))
+                .content(objectMapper.writeValueAsString(memberSignupRequest))
         );
 
         resultActions.andDo(print());

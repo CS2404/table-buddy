@@ -50,6 +50,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.auth0/java-jwt
     implementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
 
+    // 테스트 데이터 랜덤 생성
+    testImplementation 'org.jeasy:easy-random-core:5.0.0'
+
 }
 
 tasks.named('test') {
