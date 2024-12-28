@@ -17,5 +17,5 @@ spring.datasource.password: ${DATABASE.PASSWORD}
 jwt:
   access-token-expire-second: ${JWT.ACCESS_TOKEN_EXPIRE_SECOND}
   access-token-secret: ${JWT.ACCESS_TOKEN_SECRET}
-  refresh-token-expire_second: ${JWT.REFRESH_TOKEN_EXPIRE_SECOND}
+  refresh-token-expire-second: ${JWT.REFRESH_TOKEN_EXPIRE_SECOND}
   refresh-token-secret: ${JWT.REFRESH_TOKEN_SECRET}
