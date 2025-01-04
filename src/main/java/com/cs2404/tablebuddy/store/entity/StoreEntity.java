@@ -4,9 +4,11 @@ import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
 import com.cs2404.tablebuddy.member.entity.DeleteStatus;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,7 +32,9 @@ public class StoreEntity extends BaseTimeEntity {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id",
+            nullable = false,
+            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MemberEntity member;
 
     @Column(name = "name", length = 50, nullable = false)
@@ -43,6 +47,7 @@ public class StoreEntity extends BaseTimeEntity {
     @Column(name = "max_waiting_capacity", nullable = false)
     private Long maxWaitingCapacity;         // 최대 대기인원
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "is_deleted", length = 1, nullable = false)
     private DeleteStatus isDeleted;
 
