@@ -18,11 +18,18 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 @Slf4j
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    public static final List<String> PERMIT_ALL_PATHS  = Arrays.asList(
+            "/api/v1/auth/**"
+    );
 
     private final MemberService memberService;
     private final UserDetailsService userDetailsService;
@@ -40,7 +47,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers(PERMIT_ALL_PATHS.toArray(new String[0])).permitAll()
                         .anyRequest().authenticated()
                 )
 
