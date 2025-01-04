@@ -55,7 +55,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         }
 
         // public 경로
-        if (publicUrlPatterns.stream().anyMatch(pattern -> pathMatcher.match(pattern, request.getRequestURI()))) {
+        if (SecurityConfig.PERMIT_ALL_PATHS.stream().anyMatch(pattern -> pathMatcher.match(pattern, request.getRequestURI()))) {
             chain.doFilter(request, response);
             return;
         }
