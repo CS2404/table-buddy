@@ -8,8 +8,7 @@ import java.util.Map;
 
 public enum MemberRole {
     CUSTOMER,
-    OWNER
-    ;
+    OWNER;
 
     private static final Map<String, MemberRole> roleMap = new HashMap<>();
 
@@ -26,4 +25,10 @@ public enum MemberRole {
 
         throw new CustomBusinessException(ErrorCode.INVALID_ROLE);
     }
+
+    public String toRoleString() {
+        return "ROLE_" + name();
+    }
+
+
 }
