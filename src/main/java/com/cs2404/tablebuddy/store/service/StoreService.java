@@ -1,6 +1,14 @@
 package com.cs2404.tablebuddy.store.service;
 
 
+import com.cs2404.tablebuddy.common.exception.CustomBusinessException;
+import com.cs2404.tablebuddy.common.exception.ErrorCode;
+import com.cs2404.tablebuddy.member.dto.MemberDto;
+import com.cs2404.tablebuddy.member.entity.DeleteStatus;
+import com.cs2404.tablebuddy.member.entity.MemberEntity;
+import com.cs2404.tablebuddy.member.entity.MemberRole;
+import com.cs2404.tablebuddy.member.repository.MemberRepository;
+import com.cs2404.tablebuddy.store.dto.CreateStoreDto.Request;
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
 import com.cs2404.tablebuddy.store.entity.BusinessDay;
 import com.cs2404.tablebuddy.store.entity.BusinessHourEntity;
@@ -12,24 +20,50 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StoreService {
 
-    private final StoreRepository storeRepository;
+  private final StoreRepository storeRepository;
+  private final MemberRepository memberRepository;
 
-    @Transactional
-    public void saveBusinessHour(Long storeId, SaveBusinessHourDto.Request saveBusinessHourRequest) {
+  @Transactional
+  public void saveBusinessHour(Long storeId, SaveBusinessHourDto.Request saveBusinessHourRequest) {
 
-        StoreEntity foundStore = storeRepository.findById(storeId).orElseThrow();
+    StoreEntity foundStore = storeRepository.findById(storeId).orElseThrow();
 
-        for (BusinessDay openDay : saveBusinessHourRequest.getOpenDays()) {
-            BusinessHourEntity newBusinessHourEntity = BusinessHourEntity.builder()
-                    .store(foundStore)
-                    .startTime(saveBusinessHourRequest.getStartTime())
-                    .endTime(saveBusinessHourRequest.getEndTime())
-                    .openDay(openDay)
-                    .build();
+    for (BusinessDay openDay : saveBusinessHourRequest.getOpenDays()) {
+      BusinessHourEntity newBusinessHourEntity = BusinessHourEntity.builder()
+          .store(foundStore)
+          .startTime(saveBusinessHourRequest.getStartTime())
+          .endTime(saveBusinessHourRequest.getEndTime())
+          .openDay(openDay)
+          .build();
 
-            storeRepository.saveBusinessHour(newBusinessHourEntity);
-        }
+      storeRepository.saveBusinessHour(newBusinessHourEntity);
     }
+  }
+
+  @Transactional
+  public Long createStore(Request createStoreRequest, MemberDto loginMember) {
+
+    MemberEntity member = memberRepository.findMemberByMemberId(loginMember.getId())
+        .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+    // 오너 권한을 가지고 잊지 않을 경우 예외 발생
+    if (member.getRole() != MemberRole.OWNER) {
+      throw new CustomBusinessException(ErrorCode.INVALID_ROLE);
+    }
+
+    StoreEntity storeEntity = StoreEntity.builder()
+        .member(member)
+        .name(createStoreRequest.getName())
+        .category(createStoreRequest.getCategory())
+        .maxWaitingCapacity(createStoreRequest.getMaxWaitingCapacity())
+        .isDeleted(DeleteStatus.N)
+        .build();
+
+    Long storeId = storeRepository.saveStore(storeEntity);
+
+    return storeId;
+  }
 }
