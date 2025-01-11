@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("${api-root-path}/v1/stores")
 @RequiredArgsConstructor
-@PreAuthorize("hasAuthority('ROLE_USER')")
 public class StoreController {
 
   private final StoreService storeService;

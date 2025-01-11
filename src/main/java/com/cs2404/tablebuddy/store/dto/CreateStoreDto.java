@@ -2,6 +2,7 @@ package com.cs2404.tablebuddy.store.dto;
 
 import com.cs2404.tablebuddy.store.entity.Category;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,7 +30,9 @@ public class CreateStoreDto {
 
     @Size(max = 20, message = "가게 이름은 최대 20자까지 가능합니다.")
     private String name;
+    @NotNull
     private Category category;
+    @NotNull
     private Long maxWaitingCapacity;
 
     public Request(String name,

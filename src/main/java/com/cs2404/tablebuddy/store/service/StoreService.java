@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class StoreService {
 
   private final StoreRepository storeRepository;
@@ -54,6 +54,12 @@ public class StoreService {
       throw new CustomBusinessException(ErrorCode.INVALID_ROLE);
     }
 
+    // 이미 등록한 가게가 있을 경우 예외 발생
+    storeRepository.findByMember(member)
+            .ifPresent(store -> {
+              throw new CustomBusinessException(ErrorCode.ALREADY_EXIST_STORE);
+            });
+
     StoreEntity storeEntity = StoreEntity.builder()
         .member(member)
         .name(createStoreRequest.getName())
@@ -61,6 +67,7 @@ public class StoreService {
         .maxWaitingCapacity(createStoreRequest.getMaxWaitingCapacity())
         .isDeleted(DeleteStatus.N)
         .build();
+
 
     Long storeId = storeRepository.saveStore(storeEntity);
 
