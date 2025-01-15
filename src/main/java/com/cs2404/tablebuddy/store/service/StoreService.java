@@ -44,14 +44,14 @@ public class StoreService {
   }
 
   @Transactional
-  public Long createStore(Request createStoreRequest, MemberDto loginMember) {
+  public Long saveStore(Request createStoreRequest, MemberDto loginMember) {
 
     MemberEntity member = memberRepository.findMemberByMemberId(loginMember.getId())
         .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
     // 오너 권한을 가지고 잊지 않을 경우 예외 발생
     if (member.getRole() != MemberRole.OWNER) {
-      throw new CustomBusinessException(ErrorCode.INVALID_ROLE);
+      throw new CustomBusinessException(ErrorCode.INVALID_ROLE, "가게주인 권한을 가진 사용자만 가게 등록이 가능합니다.");
     }
 
     // 이미 등록한 가게가 있을 경우 예외 발생

@@ -1,10 +1,10 @@
 package com.cs2404.tablebuddy.store.dto;
 
 import com.cs2404.tablebuddy.store.entity.Category;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,6 +35,7 @@ public class CreateStoreDto {
     @NotNull
     private Long maxWaitingCapacity;
 
+    @Builder
     public Request(String name,
         Category category,
         Long maxWaitingCapacity) {

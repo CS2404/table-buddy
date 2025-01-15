@@ -9,7 +9,6 @@ import com.cs2404.tablebuddy.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,11 +34,11 @@ public class StoreController {
   }
 
   @PostMapping
-  public ResponseEntity<CreateStoreDto.Response> createStore(
+  public ResponseEntity<CreateStoreDto.Response> saveStore(
       @Valid @RequestBody CreateStoreDto.Request createStoreRequest,
       @LoginMember MemberDto loginMember
   ) {
-    Long storeId = storeService.createStore(createStoreRequest, loginMember);
+    Long storeId = storeService.saveStore(createStoreRequest, loginMember);
 
     return ResponseEntity.ok(new CreateStoreDto.Response(storeId));
   }
