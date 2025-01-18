@@ -110,20 +110,15 @@ public class ReservationController {
     }
 
     // TODO: 가게가 줄서기 신청 승인
-    @PutMapping("/waiting/{reservationId}")
+//    @PutMapping("/waiting/{reservationId}")
     public ResponseEntity<ReservationDeleteDto.Response> approveWaiting(
             @LoginMember MemberDto loginMember,
             @PathVariable Long reservationId
     ) {
         // 사장만 사용 가능한 API
         if (!loginMember.isOwner()) {
-            throw new CustomBusinessException(ErrorCode.DUPLICATE_EMAIL);
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
         }
-
-        Long id = reservationService.deleteReservation(
-                loginMember,
-                reservationId
-        );
 
         return ResponseEntity
                 .status(HttpStatus.OK)
