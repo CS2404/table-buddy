@@ -2,7 +2,6 @@ package com.cs2404.tablebuddy.reservation.entity;
 
 import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
-import com.cs2404.tablebuddy.store.entity.StoreEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,6 +33,10 @@ public class ReservationEntity extends BaseTimeEntity {
     @Column(name = "is_deleted", length = 1, nullable = false)
     private DeleteStatus isDeleted;
 
+    // 가게 엔티티의 외래키는 수동으로 관리
+    @Column(name = "store_id", nullable = false)
+    private Long storeId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id",
             updatable = false,
@@ -41,21 +44,20 @@ public class ReservationEntity extends BaseTimeEntity {
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private MemberEntity memberEntity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id",
-            updatable = false,
-            nullable = false,
-            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private StoreEntity storeEntity;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "store_id",
+//            updatable = false,
+//            nullable = false,
+//            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private StoreEntity storeEntity;
 
     @Builder
-    public ReservationEntity(Long id, ReservationStatus reservationStatus, int peopleCount, DeleteStatus isDeleted, MemberEntity memberEntity, StoreEntity storeEntity) {
+    public ReservationEntity(Long id, ReservationStatus reservationStatus, int peopleCount, DeleteStatus isDeleted, Long storeId, MemberEntity memberEntity) {
         this.id = id;
         this.reservationStatus = reservationStatus;
         this.peopleCount = peopleCount;
         this.isDeleted = isDeleted;
+        this.storeId = storeId;
         this.memberEntity = memberEntity;
-        this.storeEntity = storeEntity;
     }
-
 }
