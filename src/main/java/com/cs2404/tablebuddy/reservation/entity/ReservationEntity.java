@@ -60,4 +60,13 @@ public class ReservationEntity extends BaseTimeEntity {
         this.storeId = storeId;
         this.memberEntity = memberEntity;
     }
+
+    public void cancelReservation() {
+        this.reservationStatus = ReservationStatus.REJECTED;
+        this.isDeleted = DeleteStatus.Y;
+    }
+
+    public void changePeopleCount(int peopleCount) {
+        this.peopleCount = peopleCount;
+    }
 }

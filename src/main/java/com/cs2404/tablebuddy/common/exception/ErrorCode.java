@@ -15,6 +15,9 @@ public enum ErrorCode {
     TOKEN_EXPIRED(HttpStatus.CONFLICT, "TB1006", "토큰이 만료되었습니다."),
     TOKEN_IS_NOT_VALID(HttpStatus.CONFLICT, "TB1007", "유효하지 않은 토큰입니다."),
 
+    RESERVATION_PERMISSION_ERROR(HttpStatus.CONFLICT, "TBS1001", "예약 권한"),
+    RESERVATION_NOT_FOUND(HttpStatus.CONFLICT, "TBS1002", "예약을 찾을 수 없습니다."),
+
     INVALID_BUSINESS_DAY(HttpStatus.BAD_REQUEST, "TBJ1003", "영업일을 잘 못 입력하셨습니다."),
     ALREADY_EXIST_STORE(HttpStatus.CONFLICT, "TBJ1004", "이미 등록한 가게가 존재합니다.")
     ;
