@@ -2,9 +2,16 @@ package com.cs2404.tablebuddy.store.service;
 
 import com.cs2404.tablebuddy.common.exception.CustomBusinessException;
 import com.cs2404.tablebuddy.common.exception.ErrorCode;
+import com.cs2404.tablebuddy.member.dto.MemberDto;
+import com.cs2404.tablebuddy.member.entity.DeleteStatus;
+import com.cs2404.tablebuddy.member.entity.MemberEntity;
+import com.cs2404.tablebuddy.member.entity.MemberRole;
+import com.cs2404.tablebuddy.member.repository.MemberRepository;
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
+import com.cs2404.tablebuddy.store.dto.SaveStoreDto;
 import com.cs2404.tablebuddy.store.entity.BusinessDay;
 import com.cs2404.tablebuddy.store.entity.BusinessHourEntity;
+import com.cs2404.tablebuddy.store.entity.Category;
 import com.cs2404.tablebuddy.store.entity.StoreEntity;
 import com.cs2404.tablebuddy.store.repository.StoreRepository;
 import org.junit.jupiter.api.Test;
@@ -20,6 +27,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,6 +37,9 @@ class StoreServiceTest {
 
     @Mock
     private StoreRepository storeRepository;
+
+    @Mock
+    private MemberRepository memberRepository;
 
     @InjectMocks
     private StoreService storeService;
@@ -69,4 +80,107 @@ class StoreServiceTest {
         assertEquals("잘못된 영업요일을 입력하셨습니다. 입력된 값: 슈요일", exception.getMessage());
     }
 
+    @Test
+    void 가게_등록_성공() {
+        // given
+        MemberEntity member = MemberEntity.builder()
+                .id(1L)
+                .name("jihyun")
+                .isDeleted(DeleteStatus.N)
+                .role(MemberRole.OWNER)
+                .phoneNumber("010-1111-1111")
+                .email("abc@gmail.com")
+                .build();
+
+        SaveStoreDto.Request request = SaveStoreDto.Request.builder()
+                .name("김밥천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(30L)
+                .build();
+
+        MemberDto memberDto = new MemberDto(member);
+        // when
+        when(memberRepository.findMemberByMemberId(anyLong())).thenReturn(
+                Optional.of(member));
+
+        when(storeRepository.findByMember(member)).thenReturn(Optional.empty());
+
+        storeService.saveStore(request, memberDto);
+
+        // Then
+        verify(storeRepository, times(1)).saveStore(any(StoreEntity.class));
+
+    }
+
+    @Test
+    void 가게_등록_권한_실패() {
+        // given
+        MemberEntity member = MemberEntity.builder()
+                .id(1L)
+                .name("jihyun")
+                .isDeleted(DeleteStatus.N)
+                .role(MemberRole.CUSTOMER)
+                .phoneNumber("010-1111-1111")
+                .email("abc@gmail.com")
+                .build();
+
+        SaveStoreDto.Request request = SaveStoreDto.Request.builder()
+                .name("김밥천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(30L)
+                .build();
+
+        MemberDto memberDto = new MemberDto(member);
+
+        // when
+        when(memberRepository.findMemberByMemberId(anyLong())).thenReturn(
+                Optional.of(member));
+
+        // Then
+        CustomBusinessException exception = assertThrows(CustomBusinessException.class, () -> {
+            storeService.saveStore(request, memberDto);
+        });
+
+        assertEquals(ErrorCode.INVALID_ROLE, exception.getErrorCode());
+    }
+
+    @Test
+    void 가게_추가_등록_실패() {
+        // given
+        MemberEntity member = MemberEntity.builder()
+                .id(1L)
+                .name("jihyun")
+                .isDeleted(DeleteStatus.N)
+                .role(MemberRole.OWNER)
+                .phoneNumber("010-1111-1111")
+                .email("abc@gmail.com")
+                .build();
+
+        SaveStoreDto.Request request = SaveStoreDto.Request.builder()
+                .name("김밥천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(30L)
+                .build();
+
+        MemberDto memberDto = new MemberDto(member);
+
+        StoreEntity store = StoreEntity.builder()
+                .id(1L)
+                .name("분식천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(20L).build();
+
+        // when
+        when(memberRepository.findMemberByMemberId(anyLong())).thenReturn(
+                Optional.of(member));
+
+        when(storeRepository.findByMember(member)).thenReturn(Optional.of(store));
+
+        // Then
+        CustomBusinessException exception = assertThrows(CustomBusinessException.class, () -> {
+            storeService.saveStore(request, memberDto);
+        });
+
+        assertEquals(ErrorCode.ALREADY_EXIST_STORE, exception.getErrorCode());
+    }
 }

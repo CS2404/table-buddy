@@ -1,7 +1,10 @@
 package com.cs2404.tablebuddy.store.controller;
 
 
+import com.cs2404.tablebuddy.common.config.security.LoginMember;
+import com.cs2404.tablebuddy.member.dto.MemberDto;
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
+import com.cs2404.tablebuddy.store.dto.SaveStoreDto;
 import com.cs2404.tablebuddy.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +31,16 @@ public class StoreController {
         storeService.saveBusinessHour(storeId, saveBusinessHourRequest);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 가게 등록 API
+    @PostMapping
+    public ResponseEntity<SaveStoreDto.Response> saveStore(
+            @Valid @RequestBody SaveStoreDto.Request saveStoreRequest,
+            @LoginMember MemberDto loginMember
+    ) {
+        Long storeId = storeService.saveStore(saveStoreRequest, loginMember);
+
+        return ResponseEntity.ok(new SaveStoreDto.Response(storeId));
     }
 }
