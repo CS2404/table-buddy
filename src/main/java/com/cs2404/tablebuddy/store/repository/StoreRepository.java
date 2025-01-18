@@ -1,5 +1,6 @@
 package com.cs2404.tablebuddy.store.repository;
 
+
 import com.cs2404.tablebuddy.store.entity.BusinessHourEntity;
 import com.cs2404.tablebuddy.store.entity.StoreEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;

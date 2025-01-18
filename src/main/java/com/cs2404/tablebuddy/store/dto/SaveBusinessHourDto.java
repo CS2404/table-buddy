@@ -32,9 +32,10 @@ public class SaveBusinessHourDto {
             this.startTime = startTime;
             this.endTime = endTime;
             this.openDays = openDays.stream()
-                    .map(BusinessDay::valueOf)
+                    .map(BusinessDay::fromString)
                     .toList();
         }
+
     }
 
     @Getter
@@ -45,5 +46,6 @@ public class SaveBusinessHourDto {
         public Response(Long id) {
             this.id = id;
         }
+
     }
 }

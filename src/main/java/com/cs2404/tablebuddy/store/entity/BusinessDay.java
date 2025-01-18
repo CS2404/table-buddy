@@ -15,7 +15,7 @@ public enum BusinessDay {
         try {
             return BusinessDay.valueOf(value);
         } catch (IllegalArgumentException e) {
-            throw new CustomBusinessException(ErrorCode.INVALID_BUSINESS_DAY, "영업요일을 잘 못 입력하셨습니다. " + value);
+            throw new CustomBusinessException(ErrorCode.INVALID_BUSINESS_DAY, "잘못된 영업요일을 입력하셨습니다. " + "입력된 값: " + value);
         }
     }
 }

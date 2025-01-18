@@ -1,5 +1,6 @@
 package com.cs2404.tablebuddy.store.entity;
 
+
 import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "address")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddressEntity extends BaseTimeEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -68,3 +70,4 @@ public class AddressEntity extends BaseTimeEntity {
         this.addressLine2 = addressLine2;
     }
 }
+

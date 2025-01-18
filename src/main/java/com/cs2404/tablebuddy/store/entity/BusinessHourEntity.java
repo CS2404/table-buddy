@@ -2,7 +2,9 @@ package com.cs2404.tablebuddy.store.entity;
 
 import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,7 +29,8 @@ public class BusinessHourEntity extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id",
+            foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private StoreEntity store;
 
     @Column(name = "start_time", nullable = false)

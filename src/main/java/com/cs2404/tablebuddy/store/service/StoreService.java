@@ -1,12 +1,12 @@
 package com.cs2404.tablebuddy.store.service;
 
-import com.cs2404.tablebuddy.member.entity.DeleteStatus;
+
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
-import com.cs2404.tablebuddy.store.dto.SaveStoreDto;
 import com.cs2404.tablebuddy.store.entity.BusinessDay;
 import com.cs2404.tablebuddy.store.entity.BusinessHourEntity;
 import com.cs2404.tablebuddy.store.entity.StoreEntity;
 import com.cs2404.tablebuddy.store.repository.StoreRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +16,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
 
-    public Long saveStore(SaveStoreDto.Request saveStoreRequest) {
-
-        // TODO: memberId 추가해야함
-        StoreEntity newStore = StoreEntity.builder()
-                .name(saveStoreRequest.getName())
-                .category(saveStoreRequest.getCategory())
-                .maxWaitingCapacity(saveStoreRequest.getMaxWaitingCapacity())
-                .isDeleted(DeleteStatus.N)
-                .build();
-
-        return storeRepository.saveStore(newStore);
-    }
-
+    @Transactional
     public void saveBusinessHour(Long storeId, SaveBusinessHourDto.Request saveBusinessHourRequest) {
 
         StoreEntity foundStore = storeRepository.findById(storeId).orElseThrow();
