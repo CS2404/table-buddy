@@ -17,9 +17,9 @@ public class SaveStoreDto {
 
         @Size(max = 20, message = "가게 이름은 최대 20자까지 가능합니다.")
         private String name;
-        @NotNull
+        @NotNull(message = "category 값을 적어주세요.")
         private Category category;
-        @NotNull
+        @NotNull(message = "최대수용가능 인원을 적어주세요")
         private Long maxWaitingCapacity;
 
         @Builder
