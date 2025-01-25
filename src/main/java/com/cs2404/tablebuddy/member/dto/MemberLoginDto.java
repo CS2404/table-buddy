@@ -2,7 +2,6 @@ package com.cs2404.tablebuddy.member.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,10 +29,7 @@ public class MemberLoginDto {
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class Response {
-		@NotNull
 		private String accessToken;
-
-		@NotNull
 		private String refreshToken;
 
 		@Builder

@@ -2,7 +2,6 @@ package com.cs2404.tablebuddy.member.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,7 +38,6 @@ public class MemberSignUpDto {
 	@Getter
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class Response {
-		@NotNull
 		private Long id;
 
 		public Response(Long id) {
