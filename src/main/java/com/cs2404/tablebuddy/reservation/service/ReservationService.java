@@ -55,7 +55,9 @@ public class ReservationService {
     }
 
     @Transactional
-    public Long deleteReservation(MemberDto memberDto, Long reservationId) {
+    public Long deleteReservation(MemberDto memberDto,
+                                  Long reservationId
+    ) {
 
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
@@ -83,8 +85,8 @@ public class ReservationService {
     @Transactional
     public Long editReservation(MemberDto memberDto,
                                 Long reservationId,
-                                int peopleCount) {
-
+                                int peopleCount
+    ) {
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
@@ -111,7 +113,8 @@ public class ReservationService {
 
     @Transactional
     public Long approveReservation(MemberDto memberDto,
-                                   Long reservationId) {
+                                   Long reservationId
+    ) {
 
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
@@ -138,7 +141,8 @@ public class ReservationService {
     }
 
     public ReservationDto findReservation(MemberDto memberDto,
-                                          Long reservationId) {
+                                          Long reservationId
+    ) {
 
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
@@ -156,7 +160,8 @@ public class ReservationService {
     }
 
     public Long selectWaitingOrder(MemberDto memberDto,
-                                   Long reservationId) {
+                                   Long reservationId
+    ) {
 
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
