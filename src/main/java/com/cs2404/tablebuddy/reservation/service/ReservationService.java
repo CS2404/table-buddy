@@ -10,6 +10,8 @@ import com.cs2404.tablebuddy.reservation.entity.DeleteStatus;
 import com.cs2404.tablebuddy.reservation.entity.ReservationEntity;
 import com.cs2404.tablebuddy.reservation.entity.ReservationStatus;
 import com.cs2404.tablebuddy.reservation.repository.ReservationRepository;
+import com.cs2404.tablebuddy.store.entity.StoreEntity;
+import com.cs2404.tablebuddy.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ public class ReservationService {
 
     private final MemberRepository memberRepository;
     private final ReservationRepository reservationRepository;
+    private final StoreRepository storeRepository;
 
     @Transactional
     public Long addReservation(MemberDto memberDto,
@@ -37,6 +40,8 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         // 가게 조회
+        StoreEntity storeEntity = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
 
         ReservationEntity newReservation = ReservationEntity.builder()
                 .reservationStatus(reservationStatus)
@@ -50,7 +55,9 @@ public class ReservationService {
     }
 
     @Transactional
-    public Long deleteReservation(MemberDto memberDto, Long reservationId) {
+    public Long deleteReservation(MemberDto memberDto,
+                                  Long reservationId
+    ) {
 
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
@@ -59,6 +66,11 @@ public class ReservationService {
         // 예약 조회
         ReservationEntity reservationEntity = reservationRepository.findReservation(reservationId)
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        // 대기 상태에서만
+        if (!(reservationEntity.getReservationStatus() == ReservationStatus.PENDING)) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
 
         if (!memberEntity.getId().equals(reservationEntity.getMemberEntity().getId())) {
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
@@ -73,8 +85,8 @@ public class ReservationService {
     @Transactional
     public Long editReservation(MemberDto memberDto,
                                 Long reservationId,
-                                int peopleCount) {
-
+                                int peopleCount
+    ) {
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
@@ -82,6 +94,11 @@ public class ReservationService {
         // 예약 조회
         ReservationEntity reservationEntity = reservationRepository.findReservation(reservationId)
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        // 대기 상태에서만
+        if (!(reservationEntity.getReservationStatus() == ReservationStatus.PENDING)) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
 
         if (!memberEntity.getId().equals(reservationEntity.getMemberEntity().getId())) {
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
@@ -94,8 +111,38 @@ public class ReservationService {
         return reservationId;
     }
 
+    @Transactional
+    public Long approveReservation(MemberDto memberDto,
+                                   Long reservationId
+    ) {
+
+        // 회원 조회
+        MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 예약 조회
+        ReservationEntity reservationEntity = reservationRepository.findReservation(reservationId)
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        // 아직 승인되지 않은 예약을 대상으로
+        if (!(reservationEntity.getReservationStatus() == ReservationStatus.PENDING)) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
+        // 본인 소유의 가게
+        if (!memberEntity.getId().equals(reservationEntity.getStoreId())) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
+        // 예약 승인
+        reservationEntity.changeReservationStatus(ReservationStatus.CONFIRMED);
+
+        return reservationId;
+    }
+
     public ReservationDto findReservation(MemberDto memberDto,
-                                          Long reservationId) {
+                                          Long reservationId
+    ) {
 
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
@@ -113,7 +160,8 @@ public class ReservationService {
     }
 
     public Long selectWaitingOrder(MemberDto memberDto,
-                                   Long reservationId) {
+                                   Long reservationId
+    ) {
 
         // 회원 조회
         MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
