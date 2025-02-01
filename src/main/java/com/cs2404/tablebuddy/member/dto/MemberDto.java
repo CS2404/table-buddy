@@ -69,4 +69,7 @@ public class MemberDto {
     public boolean isOwner() {
         return role == MemberRole.OWNER;
     }
+    public boolean isCustomer() {
+        return role == MemberRole.CUSTOMER;
+    }
 }
