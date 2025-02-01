@@ -24,11 +24,16 @@ public class ReservationController {
     // 줄서기 등록
     @PostMapping("/waiting")
     public ResponseEntity<ReservationAddDto.Response> addWaiting(
-            @LoginMember MemberDto loginMember,
+            @LoginMember MemberDto loginCustomer,
             @Valid @RequestBody ReservationAddDto.Request reservationAddRequest
     ) {
+        // 고객만 사용 가능한 API
+        if (!loginCustomer.isCustomer()) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
         Long reservationId = reservationService.addReservation(
-                loginMember,
+                loginCustomer,
                 reservationAddRequest.getStoreId(),
                 reservationAddRequest.getReservationStatus(),
                 reservationAddRequest.getPeopleCount()
@@ -42,14 +47,16 @@ public class ReservationController {
     // 줄서기 등록 취소
     @DeleteMapping("/waiting/{reservationId}")
     public ResponseEntity<ReservationDeleteDto.Response> cancelWaiting(
-            @LoginMember MemberDto loginMember,
+            @LoginMember MemberDto loginCustomer,
             @PathVariable Long reservationId
     ) {
-        // TODO: 고객만 사용가능한 API로 할지 검토
-        // TODO: 사장이 취소하는 예약과 구분할지 검토
+        // 고객만 사용 가능한 API
+        if (!loginCustomer.isCustomer()) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
 
         Long id = reservationService.deleteReservation(
-                loginMember,
+                loginCustomer,
                 reservationId
         );
 
@@ -62,12 +69,17 @@ public class ReservationController {
     // - count 수정
     @PutMapping("/waiting/{reservationId}")
     public ResponseEntity<ReservationEditDto.Response> editWaiting(
-            @LoginMember MemberDto loginMember,
+            @LoginMember MemberDto loginCustomer,
             @PathVariable Long reservationId,
             @Valid @RequestBody ReservationEditDto.Request reservationEditRequest
     ) {
+        // 고객만 사용 가능한 API
+        if (!loginCustomer.isCustomer()) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
         Long id = reservationService.editReservation(
-                loginMember,
+                loginCustomer,
                 reservationId,
                 reservationEditRequest.getPeopleCount()
         );
@@ -80,11 +92,16 @@ public class ReservationController {
     // 줄서기 조회
     @GetMapping("/waiting/{reservationId}")
     public ResponseEntity<ReservationShowDto.Response> findWaiting(
-            @LoginMember MemberDto loginMember,
+            @LoginMember MemberDto loginCustomer,
             @PathVariable Long reservationId
     ) {
+        // 고객만 사용 가능한 API
+        if (!loginCustomer.isCustomer()) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
         ReservationDto reservationDto = reservationService.findReservation(
-                loginMember,
+                loginCustomer,
                 reservationId
         );
 
@@ -94,13 +111,13 @@ public class ReservationController {
     }
 
     // 대기 순번 조회
-    @GetMapping("/waiting/order/{reservationId}")
+    @GetMapping("/waiting/{reservationId}/order")
     public ResponseEntity<ReservationWaitingOrderDto.Response> selectWaitingOrder(
-            @LoginMember MemberDto loginMember,
+            @LoginMember MemberDto loginCustomer,
             @PathVariable Long reservationId
     ) {
         Long waitingOrder = reservationService.selectWaitingOrder(
-                loginMember,
+                loginCustomer,
                 reservationId
         );
 
@@ -112,16 +129,16 @@ public class ReservationController {
     // 사장(가게)이 줄서기 신청을 승인하는 용도
     @PutMapping("/waiting/{reservationId}/approval")
     public ResponseEntity<ReservationApproveDto.Response> approveWaiting(
-            @LoginMember MemberDto loginMember,
+            @LoginMember MemberDto loginOwner,
             @PathVariable Long reservationId
     ) {
         // 사장만 사용 가능한 API
-        if (!loginMember.isOwner()) {
+        if (!loginOwner.isOwner()) {
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
         }
 
         Long id = reservationService.approveReservation(
-                loginMember,
+                loginOwner,
                 reservationId
         );
 
