@@ -57,8 +57,8 @@ public class StoreController {
             @Valid @RequestBody UpdateStoreDto.Request updateStoreRequest,
             @LoginMember MemberDto loginMember
     ) {
-        Long storeId = storeService.updateStore(updateStoreRequest, loginMember, storeId);
+        Long updatedStoreId = storeService.updateStore(updateStoreRequest, loginMember, storeId);
 
-        return ResponseEntity.ok(new UpdateStoreDto.Response(storeId));
+        return ResponseEntity.ok(new UpdateStoreDto.Response(updatedStoreId));
     }
 }
