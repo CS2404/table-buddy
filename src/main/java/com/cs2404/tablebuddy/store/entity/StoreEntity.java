@@ -1,8 +1,8 @@
 package com.cs2404.tablebuddy.store.entity;
 
 import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
-import com.cs2404.tablebuddy.member.entity.DeleteStatus;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
+import com.cs2404.tablebuddy.store.dto.UpdateStoreDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -19,6 +19,12 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+
+import java.beans.FeatureDescriptor;
+import java.util.Arrays;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -59,5 +65,17 @@ public class StoreEntity extends BaseTimeEntity {
         this.category = category;
         this.maxWaitingCapacity = maxWaitingCapacity;
         this.isDeleted = isDeleted;
+    }
+
+    public void updateStore(UpdateStoreDto.Request updateStoreRequest) {
+        BeanUtils.copyProperties(updateStoreRequest, this, getNullPropertyNames(updateStoreRequest));
+    }
+
+    private String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        return Arrays.stream(src.getPropertyDescriptors())
+                .map(FeatureDescriptor::getName)
+                .filter(name -> src.getPropertyValue(name) == null)
+                .toArray(String[]::new);
     }
 }
