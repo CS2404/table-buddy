@@ -65,4 +65,11 @@ public class MemberDto {
         roles.add(new SimpleGrantedAuthority(role.toRoleString()));
         return roles;
     }
+
+    public boolean isOwner() {
+        return role == MemberRole.OWNER;
+    }
+    public boolean isCustomer() {
+        return role == MemberRole.CUSTOMER;
+    }
 }
