@@ -109,25 +109,25 @@ public class ReservationController {
                 .body(new ReservationWaitingOrderDto.Response(waitingOrder));
     }
 
-    // TODO: 가게가 줄서기 신청 승인
-//    @PutMapping("/waiting/{reservationId}")
-//    public ResponseEntity<ReservationDeleteDto.Response> approveWaiting(
-//            @LoginMember MemberDto loginMember,
-//            @PathVariable Long reservationId
-//    ) {
-//        // 사장만 사용 가능한 API
-//        if (!loginMember.isOwner()) {
-//            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
-//        }
-//
-//        Long id = reservationService.deleteReservation(
-//                loginMember,
-//                reservationId
-//        );
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(new ReservationDeleteDto.Response(id));
-//    }
+    // 사장(가게)이 줄서기 신청을 승인하는 용도
+    @PutMapping("/waiting/{reservationId}/approval")
+    public ResponseEntity<ReservationApproveDto.Response> approveWaiting(
+            @LoginMember MemberDto loginMember,
+            @PathVariable Long reservationId
+    ) {
+        // 사장만 사용 가능한 API
+        if (!loginMember.isOwner()) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
+        Long id = reservationService.approveReservation(
+                loginMember,
+                reservationId
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new ReservationApproveDto.Response(id));
+    }
 
 }

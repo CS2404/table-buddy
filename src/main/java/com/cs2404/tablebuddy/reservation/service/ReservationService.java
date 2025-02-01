@@ -94,6 +94,34 @@ public class ReservationService {
         return reservationId;
     }
 
+    @Transactional
+    public Long approveReservation(MemberDto memberDto,
+                                   Long reservationId) {
+
+        // 회원 조회
+        MemberEntity memberEntity = memberRepository.findMemberByMemberId(memberDto.getId())
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        // 예약 조회
+        ReservationEntity reservationEntity = reservationRepository.findReservation(reservationId)
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        // 아직 승인되지 않은 예약을 대상으로
+        if (!(reservationEntity.getReservationStatus() == ReservationStatus.PENDING)) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
+        // 본인 소유의 가게
+        if (!memberEntity.getId().equals(reservationEntity.getStoreId())) {
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
+        // 예약 승인
+        reservationEntity.changeReservationStatus(ReservationStatus.CONFIRMED);
+
+        return reservationId;
+    }
+
     public ReservationDto findReservation(MemberDto memberDto,
                                           Long reservationId) {
 
