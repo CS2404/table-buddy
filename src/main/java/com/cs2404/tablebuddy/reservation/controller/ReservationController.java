@@ -48,7 +48,7 @@ public class ReservationController {
     @DeleteMapping("/waiting/{reservationId}")
     public ResponseEntity<ReservationDeleteDto.Response> cancelWaiting(
             @LoginMember MemberDto loginCustomer,
-            @PathVariable Long reservationId
+            @PathVariable("reservationId") Long reservationId
     ) {
         // 고객만 사용 가능한 API
         if (!loginCustomer.isCustomer()) {
@@ -70,7 +70,7 @@ public class ReservationController {
     @PutMapping("/waiting/{reservationId}")
     public ResponseEntity<ReservationEditDto.Response> editWaiting(
             @LoginMember MemberDto loginCustomer,
-            @PathVariable Long reservationId,
+            @PathVariable("reservationId") Long reservationId,
             @Valid @RequestBody ReservationEditDto.Request reservationEditRequest
     ) {
         // 고객만 사용 가능한 API
@@ -93,7 +93,7 @@ public class ReservationController {
     @GetMapping("/waiting/{reservationId}")
     public ResponseEntity<ReservationShowDto.Response> findWaiting(
             @LoginMember MemberDto loginCustomer,
-            @PathVariable Long reservationId
+            @PathVariable("reservationId") Long reservationId
     ) {
         // 고객만 사용 가능한 API
         if (!loginCustomer.isCustomer()) {
@@ -114,7 +114,7 @@ public class ReservationController {
     @GetMapping("/waiting/{reservationId}/order")
     public ResponseEntity<ReservationWaitingOrderDto.Response> selectWaitingOrder(
             @LoginMember MemberDto loginCustomer,
-            @PathVariable Long reservationId
+            @PathVariable("reservationId") Long reservationId
     ) {
         Long waitingOrder = reservationService.selectWaitingOrder(
                 loginCustomer,
@@ -130,7 +130,7 @@ public class ReservationController {
     @PutMapping("/waiting/{reservationId}/approval")
     public ResponseEntity<ReservationApproveDto.Response> approveWaiting(
             @LoginMember MemberDto loginOwner,
-            @PathVariable Long reservationId
+            @PathVariable("reservationId") Long reservationId
     ) {
         // 사장만 사용 가능한 API
         if (!loginOwner.isOwner()) {
