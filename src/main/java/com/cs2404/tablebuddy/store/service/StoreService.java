@@ -28,7 +28,9 @@ public class StoreService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public void saveBusinessHour(Long storeId, SaveBusinessHourDto.Request saveBusinessHourRequest) {
+    public void saveBusinessHour(Long storeId,
+                                 SaveBusinessHourDto.Request saveBusinessHourRequest
+    ) {
 
         StoreEntity foundStore = storeRepository.findById(storeId).orElseThrow();
 
@@ -45,7 +47,9 @@ public class StoreService {
     }
 
     @Transactional
-    public Long saveStore(SaveStoreDto.Request createStoreRequest, MemberDto loginMember) {
+    public Long saveStore(SaveStoreDto.Request createStoreRequest,
+                          MemberDto loginMember
+    ) {
 
         MemberEntity member = getMemberEntity(loginMember);
 
@@ -74,10 +78,15 @@ public class StoreService {
         return storeId;
     }
 
-    public Long updateStore(UpdateStoreDto.Request updateStoreRequest, MemberDto loginMember, Long storeId) {
+    @Transactional
+    public Long updateStore(UpdateStoreDto.Request updateStoreRequest,
+                            MemberDto loginMember,
+                            Long storeId
+    ) {
         MemberEntity memberEntity = getMemberEntity(loginMember);
 
-        StoreEntity storeEntity = storeRepository.findById(storeId).orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
+        StoreEntity storeEntity = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
 
         if (!isValidMember(memberEntity, storeEntity)) {
             throw new CustomBusinessException(ErrorCode.STORE_OWNER_MISMATCH);
@@ -85,10 +94,13 @@ public class StoreService {
 
         storeEntity.updateStore(updateStoreRequest);
 
+
         return storeEntity.getId();
     }
 
-    private boolean isValidMember(MemberEntity member, StoreEntity store) {
+    private boolean isValidMember(MemberEntity member,
+                                  StoreEntity store
+    ) {
         return member.getId().equals(store.getMember().getId());
     }
 
