@@ -3,7 +3,7 @@ package com.cs2404.tablebuddy.store.service;
 import com.cs2404.tablebuddy.common.exception.CustomBusinessException;
 import com.cs2404.tablebuddy.common.exception.ErrorCode;
 import com.cs2404.tablebuddy.member.dto.MemberDto;
-import com.cs2404.tablebuddy.member.entity.DeleteStatus;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
 import com.cs2404.tablebuddy.member.entity.MemberRole;
 import com.cs2404.tablebuddy.member.repository.MemberRepository;

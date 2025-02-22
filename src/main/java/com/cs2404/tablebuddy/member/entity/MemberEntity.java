@@ -50,4 +50,11 @@ public class MemberEntity extends BaseTimeEntity {
         this.role = role;
         this.isDeleted = isDeleted;
     }
+
+    public boolean isOwner() {
+        return role == MemberRole.OWNER;
+    }
+    public boolean isCustomer() {
+        return role == MemberRole.CUSTOMER;
+    }
 }

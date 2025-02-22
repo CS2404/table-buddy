@@ -3,6 +3,7 @@ package com.cs2404.tablebuddy.reservation.dto;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ public class ReservationEditDto {
 		@Max(value = 1000, message = "peopleCount는 1000 이하여야 합니다.")
 		private int peopleCount;
 
+		@Builder
 		public Request(int peopleCount) {
 			this.peopleCount = peopleCount;
 		}
