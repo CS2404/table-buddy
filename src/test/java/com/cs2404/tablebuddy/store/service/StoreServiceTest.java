@@ -9,6 +9,7 @@ import com.cs2404.tablebuddy.member.entity.MemberRole;
 import com.cs2404.tablebuddy.member.repository.MemberRepository;
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
 import com.cs2404.tablebuddy.store.dto.SaveStoreDto;
+import com.cs2404.tablebuddy.store.dto.StoreDto;
 import com.cs2404.tablebuddy.store.dto.UpdateStoreDto;
 import com.cs2404.tablebuddy.store.entity.BusinessDay;
 import com.cs2404.tablebuddy.store.entity.BusinessHourEntity;
@@ -229,6 +230,49 @@ class StoreServiceTest {
                 () -> assertEquals("김밥천국", store.getName()),
                 () -> assertEquals(Category.KOREAN, store.getCategory()),
                 () -> assertEquals(30L, store.getMaxWaitingCapacity())
+        );
+
+        verify(storeRepository, times(1)).findById(storeId);
+
+    }
+
+    @Test
+    void 가게_조회_성공() {
+
+        // given
+        Long storeId = 1L;
+        Long memberId = 1L;
+
+        MemberEntity member = MemberEntity.builder()
+                .id(memberId)
+                .name("jihyun")
+                .isDeleted(DeleteStatus.N)
+                .role(MemberRole.OWNER)
+                .phoneNumber("010-1111-1111")
+                .email("abc@gmail.com")
+                .build();
+
+        StoreEntity store = StoreEntity.builder()
+                .id(storeId)
+                .member(member)
+                .name("분식천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(20L)
+                .build();
+
+
+        // Mocking
+        when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
+
+        // when
+        StoreDto storeDto= storeService.getStore(storeId);
+
+        // then
+        assertAll(
+                () -> assertEquals(store.getId(), storeDto.getId()),
+                () -> assertEquals(store.getName(), storeDto.getName()),
+                () -> assertEquals(store.getCategory(), storeDto.getCategory()),
+                () -> assertEquals(store.getMaxWaitingCapacity(), storeDto.getMaxWaitingCapacity())
         );
 
         verify(storeRepository, times(1)).findById(storeId);

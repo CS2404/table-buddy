@@ -3,15 +3,16 @@ package com.cs2404.tablebuddy.store.controller;
 
 import com.cs2404.tablebuddy.common.config.security.LoginMember;
 import com.cs2404.tablebuddy.member.dto.MemberDto;
-import com.cs2404.tablebuddy.reservation.dto.ReservationAddDto;
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
 import com.cs2404.tablebuddy.store.dto.SaveStoreDto;
+import com.cs2404.tablebuddy.store.dto.StoreDto;
 import com.cs2404.tablebuddy.store.dto.UpdateStoreDto;
 import com.cs2404.tablebuddy.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -61,4 +62,13 @@ public class StoreController {
 
         return ResponseEntity.ok(new UpdateStoreDto.Response(updatedStoreId));
     }
+
+    // 가게 단건 조회 API
+    @GetMapping("/{storeId}")
+    public ResponseEntity<StoreDto> getStore(
+            @PathVariable Long storeId
+    ) {
+        return ResponseEntity.ok(storeService.getStore(storeId));
+    }
+
 }

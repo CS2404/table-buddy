@@ -9,15 +9,16 @@ import com.cs2404.tablebuddy.member.entity.MemberRole;
 import com.cs2404.tablebuddy.member.repository.MemberRepository;
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
 import com.cs2404.tablebuddy.store.dto.SaveStoreDto;
+import com.cs2404.tablebuddy.store.dto.StoreDto;
 import com.cs2404.tablebuddy.store.dto.UpdateStoreDto;
 import com.cs2404.tablebuddy.store.entity.BusinessDay;
 import com.cs2404.tablebuddy.store.entity.BusinessHourEntity;
 import com.cs2404.tablebuddy.store.entity.DeleteStatus;
 import com.cs2404.tablebuddy.store.entity.StoreEntity;
 import com.cs2404.tablebuddy.store.repository.StoreRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -85,8 +86,7 @@ public class StoreService {
     ) {
         MemberEntity memberEntity = getMemberEntity(loginMember);
 
-        StoreEntity storeEntity = storeRepository.findById(storeId)
-                .orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
+        StoreEntity storeEntity = getStoreEntity(storeId);
 
         if (!isValidMember(memberEntity, storeEntity)) {
             throw new CustomBusinessException(ErrorCode.STORE_OWNER_MISMATCH);
@@ -98,6 +98,18 @@ public class StoreService {
         return storeEntity.getId();
     }
 
+    public StoreDto getStore(Long storeId) {
+        StoreEntity storeEntity = getStoreEntity(storeId);
+
+        return new StoreDto(storeEntity);
+    }
+
+    private StoreEntity getStoreEntity(Long storeId) {
+        return storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
+    }
+
+
     private boolean isValidMember(MemberEntity member,
                                   StoreEntity store
     ) {
@@ -108,5 +120,6 @@ public class StoreService {
         return memberRepository.findMemberByMemberId(loginMember.getId())
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
+
 
 }
