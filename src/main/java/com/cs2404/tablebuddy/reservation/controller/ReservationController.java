@@ -95,11 +95,6 @@ public class ReservationController {
             @LoginMember MemberDto loginCustomer,
             @PathVariable("reservationId") Long reservationId
     ) {
-        // 고객만 사용 가능한 API
-        if (!loginCustomer.isCustomer()) {
-            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
-        }
-
         ReservationDto reservationDto = reservationService.findReservation(
                 loginCustomer,
                 reservationId

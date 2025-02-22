@@ -152,7 +152,21 @@ public class ReservationService {
         ReservationEntity reservationEntity = reservationRepository.findReservation(reservationId)
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
 
-        if (!memberEntity.getId().equals(reservationEntity.getMemberEntity().getId())) {
+        // 가게 조회
+        StoreEntity storeEntity = storeRepository.findById(reservationEntity.getStoreId())
+                .orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
+
+        if (memberEntity.isCustomer()
+                && !memberEntity.getId().equals(reservationEntity.getMemberEntity().getId())
+        ) {
+            // 고객인 경우, 본인 예약 정보만 조회 가능
+            throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
+        }
+
+        if (memberEntity.isOwner()
+                && !memberEntity.getId().equals(storeEntity.getMember().getId())
+        ) {
+            // 사장인 경우, 본인 가게 예약 정보만 조회 가능
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
         }
 

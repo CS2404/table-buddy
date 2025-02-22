@@ -2,6 +2,7 @@ package com.cs2404.tablebuddy.reservation.dto;
 
 import com.cs2404.tablebuddy.reservation.entity.ReservationStatus;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,22 @@ public class ReservationShowDto {
 		private int peopleCount;
 		private LocalDateTime createdAt;
 		private LocalDateTime modifiedAt;
+
+		@Builder
+		public Response(Long reservationId,
+						Long storeId,
+						ReservationStatus reservationStatus,
+						int peopleCount,
+						LocalDateTime createdAt,
+						LocalDateTime modifiedAt
+		) {
+			this.reservationId = reservationId;
+			this.storeId = storeId;
+			this.reservationStatus = reservationStatus;
+			this.peopleCount = peopleCount;
+			this.createdAt = createdAt;
+			this.modifiedAt = modifiedAt;
+		}
 
 		public Response(ReservationDto reservationDto) {
 			this.reservationId = reservationDto.getId();
