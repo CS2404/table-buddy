@@ -9,6 +9,8 @@ import com.cs2404.tablebuddy.member.entity.MemberRole;
 import com.cs2404.tablebuddy.member.repository.MemberRepository;
 import com.cs2404.tablebuddy.store.dto.SaveBusinessHourDto;
 import com.cs2404.tablebuddy.store.dto.SaveStoreDto;
+import com.cs2404.tablebuddy.store.dto.StoreDto;
+import com.cs2404.tablebuddy.store.dto.UpdateStoreDto;
 import com.cs2404.tablebuddy.store.entity.BusinessDay;
 import com.cs2404.tablebuddy.store.entity.BusinessHourEntity;
 import com.cs2404.tablebuddy.store.entity.Category;
@@ -24,6 +26,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -183,4 +186,97 @@ class StoreServiceTest {
 
         assertEquals(ErrorCode.ALREADY_EXIST_STORE, exception.getErrorCode());
     }
+
+    @Test
+    void 가게_수정_성공() {
+
+        // given
+        Long storeId = 1L;
+        Long memberId = 1L;
+
+        MemberEntity member = MemberEntity.builder()
+                .id(memberId)
+                .name("jihyun")
+                .isDeleted(DeleteStatus.N)
+                .role(MemberRole.OWNER)
+                .phoneNumber("010-1111-1111")
+                .email("abc@gmail.com")
+                .build();
+
+        StoreEntity store = StoreEntity.builder()
+                .id(storeId)
+                .member(member)
+                .name("분식천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(20L)
+                .build();
+
+        UpdateStoreDto.Request request = UpdateStoreDto.Request.builder()
+                .name("김밥천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(30L)
+                .build();
+
+        // Mocking
+        when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
+        when(memberRepository.findMemberByMemberId(member.getId())).thenReturn(Optional.of(member));
+
+        // when
+        Long updatedStoreId = storeService.updateStore(request, new MemberDto(member), storeId);
+
+        // then
+        assertAll(
+                () -> assertEquals(storeId, updatedStoreId),
+                () -> assertEquals("김밥천국", store.getName()),
+                () -> assertEquals(Category.KOREAN, store.getCategory()),
+                () -> assertEquals(30L, store.getMaxWaitingCapacity())
+        );
+
+        verify(storeRepository, times(1)).findById(storeId);
+
+    }
+
+    @Test
+    void 가게_조회_성공() {
+
+        // given
+        Long storeId = 1L;
+        Long memberId = 1L;
+
+        MemberEntity member = MemberEntity.builder()
+                .id(memberId)
+                .name("jihyun")
+                .isDeleted(DeleteStatus.N)
+                .role(MemberRole.OWNER)
+                .phoneNumber("010-1111-1111")
+                .email("abc@gmail.com")
+                .build();
+
+        StoreEntity store = StoreEntity.builder()
+                .id(storeId)
+                .member(member)
+                .name("분식천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(20L)
+                .build();
+
+
+        // Mocking
+        when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
+
+        // when
+        StoreDto storeDto= storeService.getStore(storeId);
+
+        // then
+        assertAll(
+                () -> assertEquals(store.getId(), storeDto.getId()),
+                () -> assertEquals(store.getName(), storeDto.getName()),
+                () -> assertEquals(store.getCategory(), storeDto.getCategory()),
+                () -> assertEquals(store.getMaxWaitingCapacity(), storeDto.getMaxWaitingCapacity())
+        );
+
+        verify(storeRepository, times(1)).findById(storeId);
+
+    }
+
 }

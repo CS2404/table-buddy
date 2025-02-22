@@ -1,8 +1,8 @@
 package com.cs2404.tablebuddy.store.entity;
 
 import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
-import com.cs2404.tablebuddy.member.entity.DeleteStatus;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
+import com.cs2404.tablebuddy.store.dto.UpdateStoreDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -19,10 +19,18 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
+
+import java.beans.FeatureDescriptor;
+import java.util.Arrays;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 @Table(name = "store")
 public class StoreEntity extends BaseTimeEntity {
 
@@ -52,12 +60,30 @@ public class StoreEntity extends BaseTimeEntity {
     private DeleteStatus isDeleted;
 
     @Builder
-    public StoreEntity(Long id, MemberEntity member, String name, Category category, Long maxWaitingCapacity, DeleteStatus isDeleted) {
+    public StoreEntity(Long id,
+                       MemberEntity member,
+                       String name,
+                       Category category,
+                       Long maxWaitingCapacity,
+                       DeleteStatus isDeleted
+    ) {
         this.id = id;
         this.member = member;
         this.name = name;
         this.category = category;
         this.maxWaitingCapacity = maxWaitingCapacity;
         this.isDeleted = isDeleted;
+    }
+
+    public void updateStore(UpdateStoreDto.Request updateStoreRequest) {
+        BeanUtils.copyProperties(updateStoreRequest, this, getNullPropertyNames(updateStoreRequest));
+    }
+
+    private String[] getNullPropertyNames(Object source) {
+        final BeanWrapper src = new BeanWrapperImpl(source);
+        return Arrays.stream(src.getPropertyDescriptors())
+                .map(FeatureDescriptor::getName)
+                .filter(value -> src.getPropertyValue(value) == null)
+                .toArray(String[]::new);
     }
 }
