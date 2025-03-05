@@ -6,7 +6,7 @@ import com.cs2404.tablebuddy.member.dto.MemberDto;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
 import com.cs2404.tablebuddy.member.repository.MemberRepository;
 import com.cs2404.tablebuddy.reservation.dto.ReservationDto;
-import com.cs2404.tablebuddy.reservation.entity.DeleteStatus;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import com.cs2404.tablebuddy.reservation.entity.ReservationEntity;
 import com.cs2404.tablebuddy.reservation.entity.ReservationStatus;
 import com.cs2404.tablebuddy.reservation.repository.ReservationRepository;
