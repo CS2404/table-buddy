@@ -1,6 +1,6 @@
 package com.cs2404.tablebuddy.member.repository;
 
-import com.cs2404.tablebuddy.member.entity.DeleteStatus;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import com.cs2404.tablebuddy.member.entity.MemberAccessTokenEntity;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
 import com.cs2404.tablebuddy.member.entity.MemberRefreshTokenEntity;

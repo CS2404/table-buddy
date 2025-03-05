@@ -3,6 +3,7 @@ package com.cs2404.tablebuddy.member.service;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.cs2404.tablebuddy.common.config.security.JwtUtils;
 import com.cs2404.tablebuddy.common.exception.CustomBusinessException;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import com.cs2404.tablebuddy.common.exception.ErrorCode;
 import com.cs2404.tablebuddy.member.dto.MemberDto;
 import com.cs2404.tablebuddy.member.dto.MemberSignUpDto;
