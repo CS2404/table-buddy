@@ -21,6 +21,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -265,7 +269,7 @@ class StoreServiceTest {
         when(storeRepository.findById(storeId)).thenReturn(Optional.of(store));
 
         // when
-        StoreDto storeDto= storeService.getStore(storeId);
+        StoreDto storeDto = storeService.getStore(storeId);
 
         // then
         assertAll(
@@ -279,4 +283,57 @@ class StoreServiceTest {
 
     }
 
+    @Test
+    void 가게_다건_조회_성공() {
+
+        // given
+        int page = 0;
+        int size = 10;
+        Pageable pageable = PageRequest.of(page, size);
+
+        MemberEntity member1 = MemberEntity.builder()
+                .id(1L)
+                .build();
+
+        MemberEntity member2 = MemberEntity.builder()
+                .id(2L)
+                .build();
+
+        StoreEntity store1 = StoreEntity.builder()
+                .id(1L)
+                .member(member1)
+                .name("김밥천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(20L)
+                .build();
+
+        StoreEntity store2 = StoreEntity.builder()
+                .id(2L)
+                .member(member2)
+                .name("분식천국")
+                .category(Category.KOREAN)
+                .maxWaitingCapacity(20L)
+                .build();
+
+        List<StoreEntity> storeList = List.of(
+                store1, store2
+        );
+
+        long totalCount = storeList.size();  // QueryDSL에서 count 쿼리 실행한 결과
+
+        Page<StoreEntity> storePage = new PageImpl<>(storeList, pageable, totalCount);
+
+        when(storeRepository.findAll(pageable)).thenReturn(storePage);
+
+        // when
+        Page<StoreDto> result = storeService.getStores(page, size);
+
+        // then
+        assertEquals(storeList.size(), result.getContent().size());
+        assertEquals("김밥천국", result.getContent().get(0).getName());
+        assertEquals("분식천국", result.getContent().get(1).getName());
+
+        verify(storeRepository, times(1)).findAll(pageable);
+
+    }
 }

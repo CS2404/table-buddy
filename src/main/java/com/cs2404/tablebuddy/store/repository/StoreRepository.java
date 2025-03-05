@@ -7,8 +7,12 @@ import com.cs2404.tablebuddy.store.entity.StoreEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.cs2404.tablebuddy.store.entity.QStoreEntity.storeEntity;
@@ -53,6 +57,22 @@ public class StoreRepository {
 
     public void saveBusinessHour(BusinessHourEntity newBusinessHourEntity) {
         entityManager.persist(newBusinessHourEntity);
-        log.debug("businessHourId: {}", newBusinessHourEntity.getId());
     }
+
+    public Page<StoreEntity> findAll(Pageable pageable) {
+        List<StoreEntity> stores = queryFactory
+                .selectFrom(storeEntity)
+                .offset(pageable.getOffset())   // 시작 위치
+                .limit(pageable.getPageSize())  // 한 페이지 크기
+                .fetch();                       // 데이터 조회
+
+        // 전체 데이터 개수 조회
+        long total = queryFactory
+                .select(storeEntity.count())    // count 쿼리
+                .from(storeEntity)
+                .fetchOne();
+
+        return new PageImpl<>(stores, pageable, total);
+    }
+
 }
