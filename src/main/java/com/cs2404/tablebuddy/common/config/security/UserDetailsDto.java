@@ -1,7 +1,7 @@
 package com.cs2404.tablebuddy.common.config.security;
 
 import com.cs2404.tablebuddy.member.dto.MemberDto;
-import com.cs2404.tablebuddy.member.entity.DeleteStatus;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;

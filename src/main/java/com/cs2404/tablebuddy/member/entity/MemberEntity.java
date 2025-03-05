@@ -1,6 +1,7 @@
 package com.cs2404.tablebuddy.member.entity;
 
 import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
