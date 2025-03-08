@@ -68,7 +68,7 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
 
         // 대기 상태에서만
-        if (!(reservationEntity.getReservationStatus() == ReservationStatus.PENDING)) {
+        if (reservationEntity.getReservationStatus() != ReservationStatus.PENDING) {
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
         }
 
@@ -96,7 +96,7 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
 
         // 대기 상태에서만
-        if (!(reservationEntity.getReservationStatus() == ReservationStatus.PENDING)) {
+        if (reservationEntity.getReservationStatus() != ReservationStatus.PENDING) {
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
         }
 
@@ -125,7 +125,7 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.RESERVATION_NOT_FOUND));
 
         // 아직 승인되지 않은 예약을 대상으로
-        if (!(reservationEntity.getReservationStatus() == ReservationStatus.PENDING)) {
+        if (reservationEntity.getReservationStatus() != ReservationStatus.PENDING) {
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
         }
 
