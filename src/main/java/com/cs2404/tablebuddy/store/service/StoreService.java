@@ -17,6 +17,9 @@ import com.cs2404.tablebuddy.store.entity.DeleteStatus;
 import com.cs2404.tablebuddy.store.entity.StoreEntity;
 import com.cs2404.tablebuddy.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,11 +107,15 @@ public class StoreService {
         return new StoreDto(storeEntity);
     }
 
+    public Page<StoreDto> getStores(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return storeRepository.findAll(pageable).map(StoreDto::new);
+    }
+
     private StoreEntity getStoreEntity(Long storeId) {
         return storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
     }
-
 
     private boolean isValidMember(MemberEntity member,
                                   StoreEntity store
@@ -120,6 +127,4 @@ public class StoreService {
         return memberRepository.findMemberByMemberId(loginMember.getId())
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
-
-
 }
