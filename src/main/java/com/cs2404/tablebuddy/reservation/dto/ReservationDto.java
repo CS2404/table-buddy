@@ -1,7 +1,7 @@
 package com.cs2404.tablebuddy.reservation.dto;
 
 import com.cs2404.tablebuddy.member.dto.MemberDto;
-import com.cs2404.tablebuddy.reservation.entity.DeleteStatus;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import com.cs2404.tablebuddy.reservation.entity.ReservationEntity;
 import com.cs2404.tablebuddy.reservation.entity.ReservationStatus;
 import lombok.AccessLevel;

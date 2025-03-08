@@ -2,6 +2,7 @@ package com.cs2404.tablebuddy.reservation.entity;
 
 import com.cs2404.tablebuddy.common.entity.BaseTimeEntity;
 import com.cs2404.tablebuddy.member.entity.MemberEntity;
+import com.cs2404.tablebuddy.common.entity.DeleteStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -68,5 +69,9 @@ public class ReservationEntity extends BaseTimeEntity {
 
     public void changePeopleCount(int peopleCount) {
         this.peopleCount = peopleCount;
+    }
+
+    public void changeReservationStatus(ReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
     }
 }
