@@ -1,6 +1,7 @@
 package com.cs2404.tablebuddy.reservation.repository;
 
 import com.cs2404.tablebuddy.reservation.entity.ReservationEntity;
+import com.cs2404.tablebuddy.reservation.entity.ReservationStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -50,5 +51,16 @@ public class ReservationRepository {
                         reservationEntity.storeId.eq(storeId)
                 )
                 .fetch();
+    }
+
+    public Integer countWaitingCustomer(Long storeId) {
+        return queryFactory
+                .select(reservationEntity.peopleCount.sum().coalesce(0))
+                .from(reservationEntity)
+                .where(
+                        reservationEntity.storeId.eq(storeId),
+                        reservationEntity.reservationStatus.eq(ReservationStatus.CONFIRMED)
+                )
+                .fetchOne();
     }
 }

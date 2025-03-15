@@ -12,7 +12,7 @@ public class ReservationAddDto {
 	@NoArgsConstructor(access = AccessLevel.PROTECTED)
 	public static class Request {
 
-		private final ReservationStatus reservationStatus = ReservationStatus.PENDING;
+		private final ReservationStatus reservationStatus = ReservationStatus.CONFIRMED;
 
 		@NotNull(message = "storeId는 필수 값입니다.")
 		private Long storeId;
