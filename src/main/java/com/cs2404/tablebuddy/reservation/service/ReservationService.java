@@ -43,6 +43,12 @@ public class ReservationService {
         StoreEntity storeEntity = storeRepository.findById(storeId)
                 .orElseThrow(() -> new CustomBusinessException(ErrorCode.STORE_NOT_FOUND));
 
+        int waitingCustomerCount = reservationRepository.countWaitingCustomer(storeId);
+        if(peopleCount > storeEntity.getAvailableReservationCount(waitingCustomerCount)) {
+            // 현재 대기 중인 인원수가 최대 대기 가능 인원수보다 많으므로 예약 요청을 수락할 수 없다.
+            throw new CustomBusinessException(ErrorCode.RESERVATION_LIMIT_EXCEEDED);
+        }
+
         ReservationEntity newReservation = ReservationEntity.builder()
                 .reservationStatus(reservationStatus)
                 .peopleCount(peopleCount)

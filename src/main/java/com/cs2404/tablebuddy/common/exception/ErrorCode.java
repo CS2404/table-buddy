@@ -18,6 +18,7 @@ public enum ErrorCode {
     RESERVATION_PERMISSION_ERROR(HttpStatus.CONFLICT, "TBS1001", "예약 권한"),
     RESERVATION_NOT_FOUND(HttpStatus.CONFLICT, "TBS1002", "예약을 찾을 수 없습니다."),
     STORE_NOT_FOUND(HttpStatus.CONFLICT, "TBS1003", "가게를 찾을 수 없습니다."),
+    RESERVATION_LIMIT_EXCEEDED(HttpStatus.CONFLICT, "TBS1004", "예약 가능 인원을 초과했습니다."),
 
     INVALID_BUSINESS_DAY(HttpStatus.BAD_REQUEST, "TBJ1001", "영업일을 잘 못 입력하셨습니다."),
     ALREADY_EXIST_STORE(HttpStatus.CONFLICT, "TBJ1002", "이미 등록한 가게가 존재합니다."),

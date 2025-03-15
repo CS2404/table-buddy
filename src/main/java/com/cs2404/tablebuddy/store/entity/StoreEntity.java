@@ -86,4 +86,9 @@ public class StoreEntity extends BaseTimeEntity {
                 .filter(value -> src.getPropertyValue(value) == null)
                 .toArray(String[]::new);
     }
+
+    // 예약 가능 인원 조회
+    public long getAvailableReservationCount(int waitingCustomerCount) {
+        return maxWaitingCapacity - waitingCustomerCount;
+    }
 }
