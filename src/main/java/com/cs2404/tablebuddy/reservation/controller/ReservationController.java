@@ -32,16 +32,21 @@ public class ReservationController {
             throw new CustomBusinessException(ErrorCode.RESERVATION_PERMISSION_ERROR);
         }
 
-        Long reservationId = reservationService.addReservation(
-                loginCustomer,
-                reservationAddRequest.getStoreId(),
-                reservationAddRequest.getReservationStatus(),
-                reservationAddRequest.getPeopleCount()
-        );
+        try {
+            Long reservationId = reservationService.addReservation(
+                    loginCustomer,
+                    reservationAddRequest.getStoreId(),
+                    reservationAddRequest.getReservationStatus(),
+                    reservationAddRequest.getPeopleCount()
+            );
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(new ReservationAddDto.Response(reservationId));
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(new ReservationAddDto.Response(reservationId));
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CustomBusinessException(ErrorCode.RESERVATION_ADD_ERROR);
+        }
     }
 
     // 줄서기 등록 취소

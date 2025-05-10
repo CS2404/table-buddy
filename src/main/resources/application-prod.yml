@@ -13,7 +13,7 @@ logging:
   level:
     org:
       hibernate:
-        SQL: ERROR
+        SQL: DEBUG
         type:
           descriptor:
-            sql: ERROR
+            sql: DEBUG

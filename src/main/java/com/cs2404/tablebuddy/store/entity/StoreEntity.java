@@ -91,4 +91,8 @@ public class StoreEntity extends BaseTimeEntity {
     public long getAvailableReservationCount(int waitingCustomerCount) {
         return maxWaitingCapacity - waitingCustomerCount;
     }
+
+    public boolean canAcceptReservation(int waitingCustomerCount, int reservationRequestCustomerCount) {
+        return reservationRequestCustomerCount > (maxWaitingCapacity - waitingCustomerCount);
+    }
 }

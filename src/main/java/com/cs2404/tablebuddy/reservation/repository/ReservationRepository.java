@@ -4,6 +4,7 @@ import com.cs2404.tablebuddy.reservation.entity.ReservationEntity;
 import com.cs2404.tablebuddy.reservation.entity.ReservationStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -50,6 +51,18 @@ public class ReservationRepository {
                 .where(
                         reservationEntity.storeId.eq(storeId)
                 )
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
+                .fetch();
+    }
+
+    public List<ReservationEntity> findReservationListWithPessimisticLock(Long storeId) {
+        return queryFactory
+                .select(reservationEntity)
+                .from(reservationEntity)
+                .where(
+                        reservationEntity.storeId.eq(storeId)
+                )
+                .setLockMode(LockModeType.PESSIMISTIC_WRITE)
                 .fetch();
     }
 
